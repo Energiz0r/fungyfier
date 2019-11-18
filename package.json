@@ -1,0 +1,26 @@
+{
+  "name": "fungyfier",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cleanup:dist": "rimraf ./dist/*", 
+    "cleanup:server": "plink -batch -ssh pi@192.168.43.176 -pw raspberry ./fungyfier-cleanup.sh",
+    "cleanup:all": "npm-run-all -p cleanup:server cleanup:dist",
+    "copy:dist": "robocopy ./src ./dist & IF %ERRORLEVEL% LSS 8 SET ERRORLEVEL = 0 && robocopy ./ ./dist package.json & IF %ERRORLEVEL% LSS 8 SET ERRORLEVEL = 0",
+    "copy:server": "pscp -r -pw raspberry ./dist/* pi@192.168.43.176:fungyfier/",
+    "run:server": "plink -batch -ssh pi@192.168.43.176 -pw raspberry node ./fungyfier/server.js",
+    "install:server": "plink -batch -ssh pi@192.168.43.176 -pw raspberry \"cd ./fungyfier && npm install\"",
+    "deploy": "npm-run-all cleanup:all copy:dist copy:server install:server run:server"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "rimraf": "^3.0.0",
+    "npm-run-all": "^4.1.5"
+  },
+  "dependencies": {
+    "node-dht-sensor": "*"
+  }
+}
