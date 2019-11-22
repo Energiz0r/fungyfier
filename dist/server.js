@@ -1,11 +1,22 @@
-var sensor = require("node-dht-sensor");
+const display = require("./LCD-display.js");
+const dhtSensor = require("./dht-sensor.js");
+const fan = require("./fan.js");
 
-var displayData = function(){
-  sensor.read(11, 4, function(err, temperature, humidity) {
-    if (!err) {
-      console.log(`temp: ${temperature}°C, humidity: ${humidity}%`);
-    }
-  });
-}
+var runService = async function() {
+  let dhtResult = await dhtSensor.readAsync();
+  let tempString = `T:${dhtResult.temperature}C H:${dhtResult.humidity}%`;
+  display.write(new Date().toISOString().substring(11, 19), tempString);
 
-setInterval(displayData, 1000);
+  if (dhtResult.temperature > 26) {
+    fan.start();
+  } else if (dhtResult.temperature < 25) {
+    fan.stop();
+  }
+};
+
+setInterval(runService, 1000);
+
+console.log("Starting service...");
+process.on("SIGINT", _ => {
+  console.log("Stopped service")
+});
