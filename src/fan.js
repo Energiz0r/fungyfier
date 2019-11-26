@@ -1,3 +1,5 @@
+const Gpio = require('onoff').Gpio;
+const fan = new Gpio(5, 'out');
 
 let fanrunning = false;
 
@@ -7,6 +9,9 @@ module.exports = {
       return;
     }
     fanrunning = true;
+
+
+    fan.writeSync(1);
     console.log("Started fan!");
   },
 
@@ -15,6 +20,12 @@ module.exports = {
       return;
     }
     fanrunning = false;
+
+    fan.writeSync(0);
     console.log("Stopped fan!");
   }
 }
+
+process.on('SIGINT', _ => {
+  fan.unexport();
+});

@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "node-dht-sensor": "*",
-    "lcd": "^3.0.0"
+    "lcd": "^3.0.0",
+    "onoff": "5.0.0"
   }
 }
