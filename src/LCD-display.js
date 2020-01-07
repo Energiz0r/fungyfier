@@ -43,3 +43,15 @@ process.on("SIGINT", _ => {
     process.exit();
   });
 });
+
+// process.on("SIGTERM", _ => {
+//   lcd.clear(() => {
+//     lcd.print("SIGTERM")
+//   });
+// });
+
+// process.on("SIGKILL", _ => {
+//   lcd.clear(() => {
+//     lcd.print("SIGTESIGKILLRM")
+//   });
+// });

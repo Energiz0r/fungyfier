@@ -12,7 +12,9 @@
     "copy:server": "pscp -r -pw raspberry ./dist/* pi@192.168.43.176:fungyfier/",
     "run:server": "plink -batch -ssh pi@192.168.43.176 -pw raspberry node ./fungyfier/server.js",
     "install:server": "plink -batch -ssh pi@192.168.43.176 -pw raspberry \"cd ./fungyfier && npm install\"",
+    "predeploy": "plink -batch -ssh pi@192.168.43.176 -pw raspberry \"sudo systemctl stop fungyfier.service\"",
     "deploy": "npm-run-all cleanup:all copy:dist copy:server install:server",
+    "postdeploy": "plink -batch -ssh pi@192.168.43.176 -pw raspberry \"sudo systemctl start fungyfier.service\"",
     "reboot:server": "plink -batch -ssh pi@192.168.43.176 -pw raspberry \"sudo reboot now\"",
     "shutdown:server": "plink -batch -ssh pi@192.168.43.176 -pw raspberry \"sudo shutdown now -h\""
   },
