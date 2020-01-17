@@ -7,9 +7,9 @@ var runService = async function() {
   let tempString = `T:${dhtResult.temperature}C H:${dhtResult.humidity}%`;
   display.write(new Date().toISOString().substring(11, 19), tempString);
 
-  if (dhtResult.temperature > 26) {
+  if (dhtResult.humidity < 40) {
     fan.start();
-  } else if (dhtResult.temperature < 25) {
+  } else if (dhtResult.humidity > 50) {
     fan.stop();
   }
 };
