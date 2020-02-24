@@ -1,5 +1,5 @@
 const Gpio = require('onoff').Gpio;
-const fan = new Gpio(5, 'out');
+const fan = new Gpio(16, 'out');
 
 let fanrunning = false;
 

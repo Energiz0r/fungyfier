@@ -1,0 +1,65 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js
+
+PATH: 
+  C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\PuTTY\;C:\Program Files\dotnet\;C:\Program Files\Git\cmd;C:\Users\tokri\AppData\Local\Microsoft\WindowsApps;C:\Users\tokri\AppData\Roaming\npm;C:\Users\tokri\AppData\Local\Yarn\bin;C:\Users\tokri\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\tokri\.dotnet\tools
+
+Yarn version: 
+  1.22.0
+
+Node version: 
+  12.15.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  SyntaxError: D:\Projects\fungyfier\package.json: Unexpected token / in JSON at position 1496
+      at JSON.parse (<anonymous>)
+      at C:\Program Files (x86)\Yarn\lib\cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (C:\Program Files (x86)\Yarn\lib\cli.js:310:30)
+      at C:\Program Files (x86)\Yarn\lib\cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "fungyfier",
+    "version": "0.0.2",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "cleanup:dist": "rimraf ./dist/*",
+      "cleanup:server": "plink -batch -ssh pi@192.168.43.176 -pw raspberry ./fungyfier-cleanup.sh",
+      "cleanup:all": "npm-run-all -p cleanup:server cleanup:dist",
+      "copy:dist": "robocopy ./src ./dist & IF %ERRORLEVEL% LSS 8 SET ERRORLEVEL = 0 && robocopy ./ ./dist package.json & IF %ERRORLEVEL% LSS 8 SET ERRORLEVEL = 0",
+      "copy:server": "pscp -r -pw raspberry ./dist/* pi@192.168.43.176:fungyfier/",
+      "run:server": "plink -batch -ssh pi@192.168.43.176 -pw raspberry node ./fungyfier/server.js",
+      "install:server": "plink -batch -ssh pi@192.168.43.176 -pw raspberry \"cd ./fungyfier && npm install\"",
+      "predeploy": "plink -batch -ssh pi@192.168.43.176 -pw raspberry \"sudo systemctl stop fungyfier.service\"",
+      "deploy": "npm-run-all cleanup:all copy:dist copy:server install:server",
+      "postdeploy": "plink -batch -ssh pi@192.168.43.176 -pw raspberry \"sudo systemctl start fungyfier.service\"",
+      "reboot:server": "plink -batch -ssh pi@192.168.43.176 -pw raspberry \"sudo reboot now\"",
+      "shutdown:server": "plink -batch -ssh pi@192.168.43.176 -pw raspberry \"sudo shutdown now -h\""
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+      "rimraf": "^3.0.0",
+      "npm-run-all": "^4.1.5",
+      "plink": "*",
+      "pscp": "*"
+    },
+    "dependencies": {
+      // "node-dht-sensor": "*",
+      // "lcd": "^3.0.0",
+      // "onoff": "5.0.0",
+      // "node-fetch": "*"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
